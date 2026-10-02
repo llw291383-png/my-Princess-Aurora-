@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Aurora! 💛✨</title>
+    <!-- Favicon (Yellow Heart icon) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💛</text></svg>">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fff0f5 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .font-cursive { font-family: 'Dancing Script', cursive; }
+        .font-serif-title { font-family: 'Playfair Display', serif; }
+        .font-clean { font-family: 'Quicksand', sans-serif; }
+
+        .cute-card {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(253, 230, 138, 0.8);
+            box-shadow: 0 12px 35px -5px rgba(245, 158, 11, 0.15);
+            border-radius: 2rem;
+        }
+
+        .flame {
+            width: 20px;
+            height: 32px;
+            background: linear-gradient(to bottom, #fffbeb, #fbbf24, #f97316);
+            border-radius: 50% 50% 35% 35% / 60% 60% 40% 40%;
+            animation: flicker 0.15s infinite alternate ease-in-out;
+            box-shadow: 0 0 15px #fbbf24, 0 0 30px #f59e0b;
+            transform-origin: center bottom;
+            cursor: pointer;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-2deg); opacity: 0.95; }
+            100% { transform: scale(1.08) rotate(2deg); opacity: 1; }
+        }
+
+        .smoke {
+            width: 6px;
+            height: 18px;
+            background: rgba(200, 200, 200, 0.6);
+            border-radius: 10px;
+            animation: rise 2s forwards ease-out;
+            opacity: 0;
+        }
+
+        @keyframes rise {
+            0% { opacity: 0.8; transform: translateY(0) scaleX(1); filter: blur(2px); }
+            100% { opacity: 0; transform: translateY(-35px) scaleX(3); filter: blur(6px); }
+        }
+
+        /* Floating Balloons */
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            width: 45px;
+            height: 55px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+            animation: floatUp 8s linear infinite;
+        }
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 14px;
+            background: rgba(0,0,0,0.2);
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-120vh) rotate(15deg); }
+        }
+
+        /* Book Styling */
+        .book-container {
+            perspective: 1500px;
+        }
+        .book {
+            width: 100%;
+            max-width: 480px;
+            height: 520px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: #ffffff;
+            background-image: radial-gradient(#f1e5d1 0.75px, transparent 0.75px);
+            background-size: 16px 16px;
+            border: 3px solid #fde68a;
+            border-radius: 1.5rem;
+            box-shadow: inset 0 0 20px rgba(217, 119, 6, 0.08), 0 15px 30px rgba(0,0,0,0.1);
+            padding: 2.2rem 1.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            backface-visibility: hidden;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform-origin: left center;
+        }
+        .page::before {
+            content: "";
+            position: absolute;
+            top: 10px;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            border: 1px dashed #fcd34d;
+            border-radius: 1.2rem;
+            pointer-events: none;
+        }
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .gift-box {
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .gift-box:hover { transform: scale(1.05); }
+        .gift-box.shake { animation: giftShake 0.6s cubic-bezier(.36,.07,.19,.97) both; }
+
+        @keyframes giftShake {
+            10%, 90% { transform: translate3d(-2px, 0, 0) rotate(-3deg); }
+            20%, 80% { transform: translate3d(4px, 0, 0) rotate(5deg); }
+            30%, 50%, 70% { transform: translate3d(-6px, 0, 0) rotate(-6deg); }
+            40%, 60% { transform: translate3d(6px, 0, 0) rotate(6deg); }
+        }
+    </style>
+</head>
+<body class="text-gray-700 relative pb-10 selection:bg-amber-200 selection:text-amber-800">
+
+    <div id="yellowHeartsContainer" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+    <canvas id="fireworksCanvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+
+    <!-- Header Navigation & Music Bar -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/80 border-b border-amber-100 px-4 py-3 shadow-sm flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <span class="text-2xl animate-bounce">💛</span>
+            <span class="font-serif-title text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-pink-500">
+                Happy Birthday Aurora! 💛✨
+            </span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button id="musicBtn" onclick="toggleAudio()" class="flex items-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-semibold rounded-full border border-amber-200 shadow-sm px-3 py-1.5 transition-all">
+                <i id="musicIcon" class="fas fa-play text-amber-600"></i>
+                <span id="musicText" class="font-medium">Play Song 🎵</span>
+            </button>
+            <label for="customAudioFile" class="cursor-pointer bg-pink-100 hover:bg-pink-200 text-pink-700 text-xs px-2.5 py-1.5 rounded-full border border-pink-200 font-bold transition-all" title="Upload custom song">
+                📁 MP3
+            </label>
+            <input type="file" id="customAudioFile" accept="audio/*" class="hidden" onchange="loadCustomSong(event)">
+        </div>
+    </header>
+
+    <!-- ==================== STAGE 1: LOCK & COUNTDOWN PAGE ==================== -->
+    <div id="stage1" class="min-h-[90vh] flex items-center justify-center p-4">
+        <div class="cute-card p-6 sm:p-10 max-w-lg w-full text-center space-y-6 border-4 border-amber-300">
+            <div class="space-y-2">
+                <div class="text-5xl animate-bounce">🔒🎂</div>
+                <h2 class="text-3xl font-bold font-serif-title text-amber-800">Aurora's Birthday Page</h2>
+                <p class="text-xs text-amber-700 font-semibold uppercase tracking-wider">
+                    Countdown to Oct 5th (00:00 Kosovo Time)
+                </p>
+            </div>
+
+            <!-- Standalone Countdown Box -->
+            <div class="bg-gradient-to-b from-amber-50 to-amber-100/60 p-5 rounded-3xl border-2 border-amber-200 shadow-inner">
+                <div id="countdown" class="grid grid-cols-4 gap-2 text-center">
+                    <div class="bg-white rounded-2xl p-2 border border-amber-200 shadow-sm">
+                        <span id="cd-days" class="block text-2xl sm:text-3xl font-extrabold text-amber-600 font-serif-title">00</span>
+                        <span class="text-[10px] text-amber-800 font-bold">DAYS</span>
+                    </div>
+                    <div class="bg-white rounded-2xl p-2 border border-amber-200 shadow-sm">
+                        <span id="cd-hours" class="block text-2xl sm:text-3xl font-extrabold text-amber-600 font-serif-title">00</span>
+                        <span class="text-[10px] text-amber-800 font-bold">HOURS</span>
+                    </div>
+                    <div class="bg-white rounded-2xl p-2 border border-amber-200 shadow-sm">
+                        <span id="cd-mins" class="block text-2xl sm:text-3xl font-extrabold text-amber-600 font-serif-title">00</span>
+                        <span class="text-[10px] text-amber-800 font-bold">MINS</span>
+                    </div>
+                    <div class="bg-pink-50 rounded-2xl p-2 border border-pink-200 shadow-sm">
+                        <span id="cd-secs" class="block text-2xl sm:text-3xl font-extrabold text-pink-500 font-serif-title">00</span>
+                        <span class="text-[10px] text-pink-800 font-bold">SECS</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Passcode Entry Area -->
+            <div class="space-y-3 pt-2">
+                <p class="text-xs font-bold text-gray-500">Enter passcode to unlock (YYYY/MM/DD):</p>
+                <div class="flex justify-center items-center gap-1 sm:gap-1.5" id="passcodeContainer">
+                    <input type="password" maxlength="1" class="pin-input w-8 h-10 sm:w-9 sm:h-11 text-center text-lg font-bold text-amber-700 bg-amber-100 border-2 border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <input type="password" maxlength="1" class="pin-input w-8 h-10 sm:w-9 sm:h-11 text-center text-lg font-bold text-amber-700 bg-amber-100 border-2 border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <input type="password" maxlength="1" class="pin-input w-8 h-10 sm:w-9 sm:h-11 text-center text-lg font-bold text-amber-700 bg-amber-100 border-2 border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <input type="password" maxlength="1" class="pin-input w-8 h-10 sm:w-9 sm:h-11 text-center text-lg font-bold text-amber-700 bg-amber-100 border-2 border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <span class="text-amber-400 font-bold">-</span>
+                    <input type="password" maxlength="1" class="pin-input w-8 h-10 sm:w-9 sm:h-11 text-center text-lg font-bold text-amber-700 bg-amber-100 border-2 border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <input type="password" maxlength="1" class="pin-input w-8 h-10 sm:w-9 sm:h-11 text-center text-lg font-bold text-amber-700 bg-amber-100 border-2 border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <span class="text-amber-400 font-bold">-</span>
+                    <input type="password" maxlength="1" class="pin-input w-8 h-10 sm:w-9 sm:h-11 text-center text-lg font-bold text-amber-700 bg-amber-100 border-2 border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <input type="password" maxlength="1" class="pin-input w-8 h-10 sm:w-9 sm:h-11 text-center text-lg font-bold text-amber-700 bg-amber-100 border-2 border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400">
+                </div>
+                <button onclick="unlockStage1()" class="w-full py-3 bg-amber-400 hover:bg-amber-500 text-white font-bold rounded-2xl shadow-md transition-all text-sm uppercase tracking-wide mt-2">
+                    Unlock Now ✨
+                </button>
+                <p id="lockErrorMsg" class="hidden text-xs text-pink-600 font-bold"></p>
+                
+                <!-- Show Button in English -->
+                <div class="pt-4 border-t border-amber-100">
+                    <button id="adminShowBtn" onclick="promptAdminBypass()" class="text-xs text-amber-800 underline hover:text-amber-900 font-bold bg-amber-200/60 px-4 py-1.5 rounded-full transition-all">
+                        Show
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== STAGE 2: 100 BALLOONS GAME PAGE ==================== -->
+    <div id="stage2" class="hidden fixed inset-0 z-30 bg-gradient-to-b from-amber-50 via-pink-50 to-amber-100 overflow-hidden flex flex-col items-center justify-between p-4">
+        <div id="balloonsContainer" class="absolute inset-0 pointer-events-auto overflow-hidden"></div>
+
+        <div class="relative z-10 text-center mt-6 space-y-2 max-w-lg mx-auto bg-white/80 backdrop-blur-md p-4 rounded-3xl border border-amber-200 shadow-md">
+            <span class="text-xs font-bold uppercase text-amber-600 bg-amber-100 px-3 py-1 rounded-full">Pop The Balloons! 🎈</span>
+            <div id="revealedSentence" class="text-lg sm:text-xl font-bold font-serif-title text-pink-600 min-h-[50px] flex items-center justify-center flex-wrap gap-1 px-2">
+                <span class="text-gray-400 text-sm">Pop balloons to reveal the secret sentence...</span>
+            </div>
+        </div>
+
+        <div class="relative z-10 mb-6 text-center">
+            <span class="text-xs text-amber-800 bg-white/90 px-4 py-2 rounded-full shadow-sm font-bold border border-amber-200">
+                Balloons Left: <span id="balloonCount">100</span> 🎈
+            </span>
+        </div>
+    </div>
+
+    <!-- ==================== STAGE 3: CANDLE & WISH PAGE ==================== -->
+    <div id="stage3" class="hidden min-h-[85vh] flex items-center justify-center p-4 relative z-10">
+        <section class="cute-card p-6 sm:p-10 text-center relative overflow-hidden border-2 border-pink-200 max-w-lg w-full">
+            <h2 class="text-2xl sm:text-3xl font-bold font-serif-title text-pink-700 mb-2">
+                Blow Out Your Birthday Candle, Aurora! 🎂
+            </h2>
+            <p class="text-gray-600 text-xs sm:text-sm max-w-md mx-auto mb-4">
+                Blow or tap the candle flame to make your birthday wish!
+            </p>
+
+            <div class="flex flex-col items-center justify-center my-4 min-h-[170px]">
+                <div id="candleContainer" class="relative flex flex-col items-center cursor-pointer" onclick="startCandleWish()">
+                    <div id="flameElement" class="flame mb-1"></div>
+                    <div id="smokeElement" class="smoke hidden absolute top-0"></div>
+                    <div class="w-1.5 h-3 bg-gray-800 rounded-t"></div>
+                    <div class="w-4 h-12 bg-gradient-to-r from-pink-300 via-yellow-200 to-pink-300 rounded-t shadow-inner mb-0"></div>
+                    <div class="w-28 h-10 bg-pink-200 rounded-t-2xl border-t-4 border-white flex justify-around items-center px-2 relative shadow-md">
+                        <span class="text-xs">🍓</span><span class="text-xs">✨</span><span class="text-xs">🍓</span>
+                    </div>
+                    <div class="w-36 h-12 bg-amber-100 rounded-b-2xl border-t-4 border-pink-300 flex justify-center items-center relative shadow-lg"></div>
+                    <div class="w-44 h-3 bg-white rounded-full border border-gray-200 shadow-md mt-1"></div>
+                </div>
+
+                <div id="wishTimerBox" class="hidden my-4 bg-amber-100 px-6 py-2 rounded-full border border-amber-300 animate-pulse">
+                    <span class="text-sm font-bold text-amber-800">Make your wish now ✨ (<span id="wishSecs">10</span>s)</span>
+                </div>
+
+                <div class="mt-4 flex flex-wrap justify-center items-center gap-3">
+                    <button onclick="startCandleWish()" class="px-5 py-2.5 bg-pink-500 hover:bg-pink-600 text-white text-xs font-bold rounded-full shadow-md transition-all">
+                        💨 Blow Flame
+                    </button>
+                </div>
+            </div>
+
+            <!-- Wish Box -->
+            <div id="wishInputContainer" class="hidden mt-6 bg-amber-50 p-5 rounded-2xl border-2 border-amber-200 shadow-inner max-w-md mx-auto space-y-3">
+                <h3 class="text-base font-bold text-amber-800">Write a wish I can fulfill for you 💛</h3>
+                <textarea id="auroraWishInput" rows="2" placeholder="Write your wish here..." class="w-full p-3 rounded-xl border border-amber-300 text-sm focus:outline-none bg-white"></textarea>
+
+                <button onclick="goToStage4()" class="w-full py-3 bg-amber-400 hover:bg-amber-500 text-white font-bold text-xs rounded-xl shadow-md transition-all">
+                    Next Page ➔
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== STAGE 4: GIFT & CAKE PAGE ==================== -->
+    <div id="stage4" class="hidden min-h-[85vh] flex items-center justify-center p-4 relative z-10">
+        <section id="giftSection" class="cute-card p-6 sm:p-10 text-center relative border-2 border-amber-200 max-w-lg w-full">
+            <span class="text-xs font-bold uppercase tracking-widest text-amber-600 bg-amber-100 px-3 py-1 rounded-full">Special Surprise</span>
+            <h2 class="text-2xl font-bold text-gray-800 font-serif-title mt-3 mb-1">Unwrap Your Birthday Gift! 🎁</h2>
+
+            <div class="flex flex-col items-center justify-center">
+                <div id="giftBox" class="gift-box my-4 relative w-36 h-36 flex items-center justify-center" onclick="unwrapGift()">
+                    <div id="giftLid" class="absolute top-0 w-40 h-10 bg-pink-400 rounded-md shadow-lg z-20 flex items-center justify-center transition-all duration-500 border-b-2 border-pink-500">
+                        <div class="w-8 h-8 bg-amber-300 rounded-full absolute -top-4 shadow-sm border border-amber-400"></div>
+                        <div class="w-12 h-2 bg-amber-300"></div>
+                    </div>
+                    <div id="giftBase" class="w-36 h-28 bg-pink-300 rounded-b-xl shadow-xl mt-8 flex items-center justify-center overflow-hidden relative border-t border-pink-200">
+                        <div class="w-8 h-full bg-amber-300"></div>
+                    </div>
+                </div>
+
+                <div id="cakeSurprise" class="hidden transition-all duration-700 transform scale-95 opacity-0 bg-gradient-to-b from-pink-50 to-amber-50 p-6 rounded-3xl border-2 border-pink-200 shadow-xl max-w-md w-full mt-2 space-y-4">
+                    <div class="text-4xl mb-2 animate-bounce">🎂 ✨ 🎉</div>
+                    <h3 class="text-2xl font-bold font-serif-title text-pink-600">Happy Birthday Cake!</h3>
+
+                    <div class="my-4 flex flex-col items-center">
+                        <div class="flex gap-2 mb-1">🕯️ 🕯️ 🕯️</div>
+                        <div class="w-24 h-8 bg-pink-300 rounded-t-lg border-b-2 border-white flex items-center justify-center text-xs">💖 💖</div>
+                        <div class="w-36 h-10 bg-amber-200 border-b-2 border-white flex items-center justify-center text-xs">🍓 🍓 🍓</div>
+                        <div class="w-48 h-12 bg-pink-200 rounded-b-xl flex items-center justify-center text-xs font-bold text-pink-700">✨ Aurora ✨</div>
+                        <div class="w-56 h-3 bg-white rounded-full shadow-md mt-1"></div>
+                    </div>
+
+                    <p class="text-xs text-amber-800 font-bold">Automatically moving to book page in <span id="autoTimer">35</span>s...</p>
+                    <button onclick="goToStage5()" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-white font-bold text-xs rounded-full shadow">
+                        Next Page: Letter Book 📖 ➔
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== STAGE 5: CLEAR & READABLE LETTER BOOK ==================== -->
+    <div id="stage5" class="hidden min-h-[85vh] flex flex-col items-center justify-center p-4 relative z-10">
+        <div class="book-container w-full max-w-lg mx-auto">
+            <div class="book mx-auto" id="interactiveBook">
+                
+                <!-- Page 1: Cover Page -->
+                <div class="page z-30" id="page1">
+                    <div class="text-center space-y-4 my-auto">
+                        <div class="text-6xl animate-bounce">💌</div>
+                        <h1 class="font-cursive text-5xl text-pink-600 font-bold leading-relaxed">
+                            Happy birthday babe
+                        </h1>
+                        <p class="font-serif-title text-xl text-amber-700 italic">To My Beautiful Princess ✨</p>
+                    </div>
+                    <button onclick="flipPage(1)" class="w-full py-2.5 bg-amber-400 hover:bg-amber-500 text-white font-bold text-xs rounded-full shadow-md transition-all">
+                        Next Page ➔
+                    </button>
+                </div>
+
+                <!-- Page 2: Letter Body -->
+                <div class="page z-20" id="page2">
+                    <div class="text-center space-y-3 overflow-y-auto my-auto max-h-[390px] px-2">
+                        <p class="font-clean text-gray-800 text-base sm:text-lg font-semibold leading-relaxed tracking-wide">
+                            Today is not just an ordinary birthday but the day the world was brightened by your existence. I just wanted to gently remind you how lucky I am to have you in my life and how much warmth and joy you bring to my days simply by existing. I wish you a new year softened with love, filled with moments that make your heart smile, and realizing every silent wish in your mind. I love you so much my beautiful princess. I hope this year is prettier, kinder, and better for you.
+                        </p>
+                    </div>
+                    <div class="flex justify-between w-full gap-2 pt-2">
+                        <button onclick="unflipPage(1)" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold text-xs rounded-full">Previous</button>
+                        <button onclick="flipPage(2)" class="px-6 py-2 bg-amber-400 text-white font-bold text-xs rounded-full">Next Page ➔</button>
+                    </div>
+                </div>
+
+                <!-- Page 3: Final Letter Wishes -->
+                <div class="page z-10" id="page3">
+                    <div class="text-center space-y-3 overflow-y-auto my-auto max-h-[390px] px-2">
+                        <h2 class="text-lg font-bold font-serif-title text-amber-800 border-b-2 border-amber-200 pb-1 inline-block">
+                            My Wishes For You This Year 💛
+                        </h2>
+                        <p class="font-clean text-gray-800 text-base sm:text-lg font-semibold leading-relaxed tracking-wide">
+                            Happy birthday my beautiful princess 💛 I hope this year brings you so much happiness and peace. I hope sadness never finds its way into your life and your beautiful eyes never have to cry because of something painful. I hope all your wishes come true and that you always have reasons to smile and be happy. I hope this year is gentle with you and brings you everything your heart wishes for. I love you so much and I’m really grateful to have you in my life. Happy birthday again my princess 💛
+                        </p>
+                    </div>
+                    <div class="flex justify-between w-full gap-2 pt-2">
+                        <button onclick="unflipPage(2)" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold text-xs rounded-full">Previous</button>
+                        <button onclick="goToStage6()" class="px-6 py-2.5 bg-gradient-to-r from-pink-400 to-amber-400 hover:from-pink-500 hover:to-amber-500 text-white font-bold text-xs rounded-full shadow-lg">
+                            Next Page ➔
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== STAGE 6: END BALLOONS & PROTECTED REPLY PAGE ==================== -->
+    <div id="stage6" class="hidden min-h-[90vh] flex flex-col items-center justify-center p-4 relative z-10">
+        <div id="endBalloonsContainer" class="fixed inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+        <div class="cute-card p-6 sm:p-10 text-center relative max-w-lg w-full space-y-6 z-10 border-2 border-amber-300">
+            <div class="text-6xl mb-2 inline-block">💛</div>
+            <h2 class="text-2xl sm:text-3xl font-bold font-serif-title text-amber-800">Leave a Reply Note</h2>
+            <p class="text-xs text-amber-700 font-medium">A space for Aurora to write back or save a wish!</p>
+
+            <form onsubmit="saveAuroraNote(event)" class="space-y-4">
+                <textarea id="auroraNoteInput" rows="3" placeholder="Write your reply here, Aurora... 💛" class="w-full p-4 rounded-2xl border-2 border-amber-300 bg-white text-sm focus:outline-none shadow-inner resize-none"></textarea>
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-white font-bold rounded-2xl shadow-md transition-all text-sm flex items-center justify-center gap-2">
+                    <i class="fas fa-heart"></i> Save Note 💛
+                </button>
+            </form>
+
+            <!-- Protected Secret View Section -->
+            <div class="pt-4 border-t border-amber-200 space-y-3">
+                <p class="text-xs font-bold text-gray-500">View Saved Replies:</p>
+                <div class="flex items-center gap-2 max-w-xs mx-auto">
+                    <input type="password" id="notePassInput" placeholder="Enter Secret Code" class="p-2 border rounded-xl text-xs w-2/3 text-center">
+                    <button onclick="revealSavedNote()" class="w-1/3 py-2 bg-amber-400 text-white font-bold text-xs rounded-xl shadow">
+                        Reveal 🔒
+                    </button>
+                </div>
+                <div id="savedNoteDisplay" class="hidden bg-white/90 p-4 rounded-2xl border border-amber-200 text-amber-900 shadow-sm text-left space-y-3">
+                    <div>
+                        <span class="text-xs font-bold text-amber-600 block mb-1">Aurora's Candle Wish:</span>
+                        <p id="savedWishText" class="font-clean font-medium text-base leading-snug bg-amber-50 p-3 rounded-lg border border-amber-100"></p>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-amber-600 block mb-1">Aurora's Reply Note:</span>
+                        <p id="savedNoteText" class="font-clean font-medium text-base leading-snug bg-amber-50 p-3 rounded-lg border border-amber-100"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HTML Audio Element (We Fell in Love in October Song Direct Stream) -->
+    <audio id="octoberSong" loop preload="auto">
+        <source src="https://ia801503.us.archive.org/15/items/girl-in-red-we-fell-in-love-in-october/girl%20in%20red%20-%20we%20fell%20in%20love%20in%20october.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Configuration
+        const ENTRY_PIN = "20091005"; 
+        const SECRET_VIEW_PIN = "2002"; 
+        const ADMIN_BYPASS_PIN = "2002";
+
+        const targetSentence = "Happy birthday to the most beautiful princess in the world";
+        let sentenceIndex = 0;
+        let balloonCount = 100;
+        let isCountdownFinished = false;
+        let isPlayingAudio = false;
+
+        const audio = document.getElementById('octoberSong');
+
+        function playOctoberSong() {
+            audio.play().then(() => {
+                isPlayingAudio = true;
+                updateMusicBtnUI();
+            }).catch(error => {
+                console.log("Autoplay prevented by browser, waiting for user interaction:", error);
+            });
+        }
+
+        function toggleAudio() {
+            if (isPlayingAudio) {
+                audio.pause();
+                isPlayingAudio = false;
+            } else {
+                audio.play();
+                isPlayingAudio = true;
+            }
+            updateMusicBtnUI();
+        }
+
+        function loadCustomSong(event) {
+            const file = event.target.files[0];
+            if (file) {
+                audio.src = URL.createObjectURL(file);
+                audio.play();
+                isPlayingAudio = true;
+                updateMusicBtnUI();
+            }
+        }
+
+        function updateMusicBtnUI() {
+            const icon = document.getElementById('musicIcon');
+            const text = document.getElementById('musicText');
+            if (isPlayingAudio) {
+                icon.className = 'fas fa-pause text-amber-600';
+                text.innerText = 'Playing ♪';
+            } else {
+                icon.className = 'fas fa-play text-amber-600';
+                text.innerText = 'Play Song 🎵';
+            }
+        }
+
+        /* Stage 1: Countdown & Passcode Verification */
+        const inputs = document.querySelectorAll('.pin-input');
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value && index < inputs.length - 1) inputs[index + 1].focus();
+                if (getEnteredPin().length === 8) unlockStage1();
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) inputs[index - 1].focus();
+            });
+        });
+
+        function getEnteredPin() {
+            let pin = '';
+            inputs.forEach(input => pin += input.value);
+            return pin;
+        }
+
+        function unlockStage1() {
+            const errElem = document.getElementById('lockErrorMsg');
+            if (getEnteredPin() === ENTRY_PIN) {
+                if (isCountdownFinished) {
+                    goToStage2();
+                } else {
+                    errElem.innerText = "It's not birthday time yet! Please wait for the countdown to finish.";
+                    errElem.classList.remove('hidden');
+                }
+            } else {
+                errElem.innerText = "Wrong passcode! Please try again.";
+                errElem.classList.remove('hidden');
+            }
+        }
+
+        function promptAdminBypass() {
+            const pass = prompt("Enter your Show code:");
+            if (pass === ADMIN_BYPASS_PIN) {
+                goToStage2();
+            } else if (pass !== null) {
+                alert("Wrong code!");
+            }
+        }
+
+        function startKosovoCountdown() {
+            const targetDate = new Date("2026-10-05T00:00:00+02:00");
+            function update() {
+                const now = new Date();
+                const diff = targetDate - now;
+                if (diff <= 0) {
+                    if (!isCountdownFinished) {
+                        isCountdownFinished = true;
+                        const showBtn = document.getElementById('adminShowBtn');
+                        if (showBtn) showBtn.style.display = 'none';
+
+                        // Start playing 'We Fell in Love in October' automatically
+                        playOctoberSong();
+                        goToStage2();
+                    }
+                    return;
+                }
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const mins = Math.floor((diff / 1000 / 60) % 60);
+                const secs = Math.floor((diff / 1000) % 60);
+
+                document.getElementById('cd-days').innerText = String(days).padStart(2, '0');
+                document.getElementById('cd-hours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('cd-mins').innerText = String(mins).padStart(2, '0');
+                document.getElementById('cd-secs').innerText = String(secs).padStart(2, '0');
+            }
+            update();
+            setInterval(update, 1000);
+        }
+
+        /* Stage 2: 100 Balloons Pop Game */
+        function goToStage2() {
+            document.getElementById('stage1').classList.add('hidden');
+            document.getElementById('stage2').classList.remove('hidden');
+            playOctoberSong();
+            spawn100Balloons();
+        }
+
+        function spawn100Balloons() {
+            const container = document.getElementById('balloonsContainer');
+            const colors = ['#f472b6', '#fbbf24', '#60a5fa', '#34d399', '#a78bfa', '#f43f5e'];
+            
+            for (let i = 0; i < 100; i++) {
+                const b = document.createElement('div');
+                b.className = 'balloon';
+                b.style.left = Math.random() * 90 + 2 + 'vw';
+                b.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                b.style.animationDuration = (5 + Math.random() * 6) + 's';
+                b.style.animationDelay = (Math.random() * 8) + 's';
+                
+                b.onclick = function() {
+                    popBalloon(b);
+                };
+                container.appendChild(b);
+            }
+        }
+
+        function popBalloon(balloon) {
+            balloon.remove();
+            balloonCount--;
+            document.getElementById('balloonCount').innerText = balloonCount;
+
+            if (sentenceIndex < targetSentence.length) {
+                const char = targetSentence[sentenceIndex];
+                const display = document.getElementById('revealedSentence');
+                if (sentenceIndex === 0) display.innerHTML = '';
+                
+                const span = document.createElement('span');
+                span.innerText = char === ' ' ? '\u00A0' : char;
+                span.className = 'text-amber-800 transition-opacity duration-300';
+                display.appendChild(span);
+
+                sentenceIndex++;
+
+                if (sentenceIndex >= targetSentence.length) {
+                    launchHeartConfetti();
+                    setTimeout(() => {
+                        goToStage3();
+                    }, 1500);
+                }
+            }
+        }
+
+        /* Stage 3: Candle Blow Page */
+        function goToStage3() {
+            document.getElementById('stage2').classList.add('hidden');
+            document.getElementById('stage3').classList.remove('hidden');
+        }
+
+        let candleBlown = false;
+        function startCandleWish() {
+            if (candleBlown) return;
+            candleBlown = true;
+
+            const timerBox = document.getElementById('wishTimerBox');
+            timerBox.classList.remove('hidden');
+            let secs = 10;
+
+            const interval = setInterval(() => {
+                secs--;
+                document.getElementById('wishSecs').innerText = secs;
+                if (secs <= 0) {
+                    clearInterval(interval);
+                    timerBox.classList.add('hidden');
+                    document.getElementById('flameElement').classList.add('hidden');
+                    document.getElementById('smokeElement').classList.remove('hidden');
+                    document.getElementById('wishInputContainer').classList.remove('hidden');
+                    launchHeartConfetti();
+                }
+            }, 1000);
+        }
+
+        /* Stage 4: Gift & Cake Page */
+        function goToStage4() {
+            const wishVal = document.getElementById('auroraWishInput').value;
+            if (wishVal) {
+                localStorage.setItem('aurora_bday_wish', wishVal);
+            }
+            document.getElementById('stage3').classList.add('hidden');
+            document.getElementById('stage4').classList.remove('hidden');
+        }
+
+        let giftUnwrapped = false;
+        function unwrapGift() {
+            if (giftUnwrapped) return;
+            giftUnwrapped = true;
+
+            const box = document.getElementById('giftBox');
+            const lid = document.getElementById('giftLid');
+            const surprise = document.getElementById('cakeSurprise');
+
+            box.classList.add('shake');
+            setTimeout(() => {
+                box.classList.remove('shake');
+                lid.style.transform = 'translateY(-60px) rotate(-15deg)';
+                lid.style.opacity = '0';
+
+                setTimeout(() => {
+                    surprise.classList.remove('hidden');
+                    surprise.classList.remove('scale-95', 'opacity-0');
+                    launchHeartConfetti();
+                    triggerFireworks();
+
+                    let autoSecs = 35;
+                    const autoTimer = setInterval(() => {
+                        autoSecs--;
+                        document.getElementById('autoTimer').innerText = autoSecs;
+                        if (autoSecs <= 0) {
+                            clearInterval(autoTimer);
+                            goToStage5();
+                        }
+                    }, 1000);
+                }, 300);
+            }, 600);
+        }
+
+        /* Stage 5: Flippable Letter Book Page */
+        function goToStage5() {
+            document.getElementById('stage4').classList.add('hidden');
+            document.getElementById('stage5').classList.remove('hidden');
+        }
+
+        function flipPage(pageNum) {
+            document.getElementById(`page${pageNum}`).classList.add('flipped');
+        }
+        function unflipPage(pageNum) {
+            document.getElementById(`page${pageNum}`).classList.remove('flipped');
+        }
+
+        /* Stage 6: Final Balloons & Protected Reply Page */
+        function goToStage6() {
+            document.getElementById('stage5').classList.add('hidden');
+            document.getElementById('stage6').classList.remove('hidden');
+            spawnEndBalloons();
+        }
+
+        function spawnEndBalloons() {
+            const container = document.getElementById('endBalloonsContainer');
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'balloon';
+                heart.innerText = '🎈';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (6 + Math.random() * 8) + 's';
+                container.appendChild(heart);
+            }
+        }
+
+        function saveAuroraNote(e) {
+            e.preventDefault();
+            const text = document.getElementById('auroraNoteInput').value;
+            if (!text) return;
+            localStorage.setItem('aurora_bday_note', text);
+            alert('Note saved successfully! 💛');
+            document.getElementById('auroraNoteInput').value = '';
+        }
+
+        function revealSavedNote() {
+            const pass = document.getElementById('notePassInput').value;
+            if (pass === SECRET_VIEW_PIN) {
+                const savedWish = localStorage.getItem('aurora_bday_wish') || 'No wish written.';
+                const savedNote = localStorage.getItem('aurora_bday_note') || 'No reply note saved yet.';
+                
+                document.getElementById('savedWishText').innerText = savedWish;
+                document.getElementById('savedNoteText').innerText = savedNote;
+                document.getElementById('savedNoteDisplay').classList.remove('hidden');
+            } else {
+                alert('Wrong passcode!');
+            }
+        }
+
+        /* Visual Effects */
+        function launchHeartConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 85,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#fbbf24', '#f59e0b', '#f472b6', '#fef08a']
+                });
+            }
+        }
+
+        let canvas, ctx, particles = [];
+        function initFireworks() {
+            canvas = document.getElementById('fireworksCanvas');
+            ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            requestAnimationFrame(updateFireworks);
+        }
+
+        function triggerFireworks() {
+            for (let i = 0; i < 4; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * (canvas.width - 200) + 100;
+                    const y = Math.random() * (canvas.height / 2) + 100;
+                    createFirework(x, y);
+                }, i * 300);
+            }
+        }
+
+        function createFirework(x, y) {
+            const count = 35;
+            const colors = ['#f59e0b', '#fbbf24', '#f472b6', '#fef08a'];
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 / count) * i;
+                const speed = Math.random() * 3 + 2;
+                particles.push({
+                    x: x, y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    alpha: 1,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    size: Math.random() * 3 + 2
+                });
+            }
+        }
+
+        function updateFireworks() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.04;
+                p.alpha -= 0.015;
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                } else {
+                    ctx.save();
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+            requestAnimationFrame(updateFireworks);
+        }
+
+        window.onload = function() {
+            startKosovoCountdown();
+            initFireworks();
+        };
+    </script>
+</body>
+</html>
